@@ -2,9 +2,9 @@
 // Первое задание
 let ru = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
 let en = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-let days = [ru, en];
 
-let lang = 'en';
+
+let lang = prompt('Выберите язык, "ru" или "en"', 'ru');
 // Через IF
 if(lang === 'ru'){
     console.log('Понедельник, Вторник, Среда, Четверг, Пятница, Суббота, Воскресенье');
@@ -24,13 +24,19 @@ switch (lang) {
         break;
 }
 // Через тернарный оператор и многомерный массив
-lang === 'ru' ? console.log(days[0]) : console.log(days[1])
+
+let object = {
+    'ru' : ru,
+    'en' : en,
+}
+
+console.log(object[lang]);
 
 
 // Второе задание
 let namePerson = 'Степан';
 
-namePerson === 'Артем' ? console.log('Директор') : 
+namePerson === 'Артем' ? console.log('Директор') :
 namePerson === 'Максим' ? console.log('Преподаватель') : console.log('Ученик');
- 
+
 
