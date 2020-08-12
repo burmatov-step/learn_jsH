@@ -1,13 +1,24 @@
 'use strict'
 
-function sss(str) {
-  if(typeof str !== 'string'){
-    alert('Введите строку');
-    return
-  } else if(str.length > 30){
-    return str.trim().substring(0, 30) + '...'
-  } else{
-    return str.trim();
+let arr = []
+
+function arrNumber() {
+  for(let i = 7; i > 0; i--){
+    let num;
+    num = prompt(`Введите 7 многозначное число, осталось: ${i}`);
+    arr.push(num);
   }
+  return arr
+}
+arrNumber();
+
+for (let i = 0; i < arr.length; i++) {
+  if (arr[i][0] == 2 || arr[i][0] == 4) console.log(arr[i]);
 }
 
+for(let i = 0; i< arr.length; i++){
+
+  if(+arr[i] % 2 !== 0 && +arr[i] > 0){
+    console.log(`Делитель этого числа: 1 и ${arr[i]}`)
+  }
+}
