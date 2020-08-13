@@ -14,7 +14,7 @@ function numberPlay(x = 9) {
   return function number() {
     let ourNumber = prompt("Угадай число от 1 до 100");
     if (ourNumber === null) {
-      alert("Возвращайтесь еще!")
+      alert("Возвращайтесь еще!");
       return;
     } else if (!isNumber(ourNumber)) {
       alert("Введите число");
@@ -39,7 +39,7 @@ function numberPlay(x = 9) {
      if(end === true){
        numberPlay()();
      } else{
-       return
+       return;
      }
 
     }
