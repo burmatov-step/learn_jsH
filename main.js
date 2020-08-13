@@ -1,24 +1,49 @@
-'use strict'
+"use strict";
 
-let arr = []
 
-function arrNumber() {
-  for(let i = 7; i > 0; i--){
-    let num;
-    num = prompt(`Введите 7 многозначное число, осталось: ${i}`);
-    arr.push(num);
-  }
-  return arr
+
+let isNumber = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+let start = numberPlay();
+start();
+
+function numberPlay(x = 9) {
+  let num = Math.ceil(Math.random() * 100);
+  return function number() {
+    let ourNumber = prompt("Угадай число от 1 до 100");
+    if (ourNumber === null) {
+      alert("Возвращайтесь еще!")
+      return;
+    } else if (!isNumber(ourNumber)) {
+      alert("Введите число");
+      number();
+    } else if (+ourNumber > num && x !== 0) {
+      alert(`Загаданное число меньше, осталось попыток ${x}`);
+      x--;
+      number();
+    } else if (+ourNumber < num && x !== 0) {
+      alert(`Загаданное число больше, осталось попыток ${x}`);
+      x--;
+      number();
+    } else if (+ourNumber === num) {
+     let good =  confirm("Поздравлю, вы угадали!!! Хотели бы сыграть еще?");
+      if (good === true) {
+        numberPlay()();
+      } else {
+        return;
+      }
+    } else if (x === 0) {
+     let end =  confirm("Попытки закончились, хотите сыграть еще?");
+     if(end === true){
+       numberPlay()();
+     } else{
+       return
+     }
+
+    }
+  };
 }
-arrNumber();
 
-for (let i = 0; i < arr.length; i++) {
-  if (arr[i][0] == 2 || arr[i][0] == 4) console.log(arr[i]);
-}
 
-for(let i = 0; i<= 100; i++){
-
-  if(i % 2 !== 0){
-    console.log(`Делитель этого числа: 1 и ${i}`);
-  }
-}
