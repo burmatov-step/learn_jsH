@@ -16,9 +16,20 @@ for (let i = 0; i < arr.length; i++) {
   if (arr[i][0] == 2 || arr[i][0] == 4) console.log(arr[i]);
 }
 
-for(let i = 0; i<= 100; i++){
+let array = [];
 
-  if(i % 2 !== 0){
-    console.log(`Делитель этого числа: 1 и ${i}`);
+for (let i = 1; i <= 100; i++) {
+  for (let j = 1; j <= 100; j++) {
+    let num = i / j;
+
+    if (Number.isInteger(num)) {
+      array.push(num);
+    }
   }
+
+  if (array.length === 2) {
+    console.log(`${i}: Делители этого числа: 1 и ${i}`);
+  }
+
+  array = [];
 }
