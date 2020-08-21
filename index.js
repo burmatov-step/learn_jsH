@@ -21,8 +21,6 @@ let started = document.getElementById("start"),
   targetMonth = document.getElementsByClassName("target_month-value")[0],
   summBudget = document.querySelector(".salary-amount"),
   incomeTitle = document.querySelector(".income-title"),
-  placsHolder = document.querySelectorAll('input[placeholder="Наименование"]'),
-  placeSumm = document.querySelectorAll('input[placeholder="Сумма"]'),
   expensesTitle = document.querySelector(".expenses-title"),
   expensesItems = document.querySelectorAll(".expenses-items"),
   additionalExpensesItem = document.querySelector(".additional_expenses-item"),
@@ -70,6 +68,24 @@ let appData = {
     appData.getBudget();
 
     appData.showResult();
+  },
+  getRusSym: function () {
+    let placsHolder = document.querySelectorAll(
+      'input[placeholder="Наименование"]'
+    );
+    placsHolder.forEach(function (item) {
+      item.addEventListener("input", () => {
+      item.value = item.value.replace(/[^А-Яа-яЁё., ]/, "");
+    });
+});
+  },
+  getNumVal: function () {
+    let placeSumm = document.querySelectorAll('input[placeholder="Сумма"]');
+    placeSumm.forEach(function (item) {
+      item.addEventListener("input", () => {
+        item.value = item.value.replace(/[^0-9]/, "");
+      });
+  });
   },
   getExpensesMonth: function () {
     let sum = 0;
@@ -137,6 +153,7 @@ let appData = {
     });
     incomeItem[0].parentNode.insertBefore(cloneIncomeItems, plusIncome);
     incomeItem = document.querySelectorAll(".income-items");
+
     if (incomeItem.length === 3) {
       plusIncome.style.display = "none";
     }
@@ -220,22 +237,31 @@ let appData = {
   },
 };
 
-placeSumm.forEach(function (item) {
-  item.addEventListener("input", () => {
-    item.value = item.value.replace(/[^0-9]/, "");
-  });
-});
+appData.getNumVal();
+appData.getRusSym();
 
-placsHolder.forEach(function (item) {
-  item.addEventListener("input", () => {
-    item.value = item.value.replace(/[^А-Яа-яЁё., ]/, "");
-  });
-});
+// placeSumm.forEach(function (item) {
+//   item.addEventListener("input", () => {
+//     item.value = item.value.replace(/[^0-9]/, "");
+//   });
+// });
+
+
 
 started.addEventListener("click", appData.start);
 
-plusExpenses.addEventListener("click", appData.addExpensesBlock);
-plusIncome.addEventListener("click", appData.addIncomeBlock);
+plusExpenses.addEventListener("click", function () {
+  appData.addExpensesBlock();
+  appData.getNumVal();
+  appData.getRusSym();
+
+});
+plusIncome.addEventListener("click", function(){
+  appData.addIncomeBlock();
+  appData.getNumVal();
+  appData.getRusSym();
+
+});
 periodSelect.addEventListener("change", function () {
   periodAmount.textContent = periodSelect.value;
 });
