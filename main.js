@@ -1,27 +1,36 @@
 "use strict";
-const wrapper = document.querySelector(".wrapper");
-const color = document.querySelector(".color");
-const change = document.getElementById("change");
-const symbol = '0123456789ABCDEF';
+const DomElement = function (selector, height, width, bg, fontSize) {
+  this.selector = selector;
+  this.height = height;
+  this.width = width;
+  this.bg = bg;
+  this.fontSize = fontSize;
+};
 
+DomElement.prototype.create = function () {
+  let el;
+  let inp = document.createElement("input");
+  if(this.selector[0] === '.'){
+   el =  document.createElement('div');
 
-wrapper.style.textAlign = 'center';
-change.style.height = '30px';
-change.style.width = "100px";
-
-
-function gen () {
-  let colorNum = "#";
-  for(let i=0; i<6; i++){
-   let ff = symbol.split("")[Math.floor(Math.random() * 15)];
-    colorNum += ff;
+  } else if(this.selector[0] === '#'){
+     el = document.createElement("p");
+  } else{
+    return
   }
-  document.body.style.background = `${colorNum}`;
-  color.textContent = colorNum;
-}
+  el.style.height = this.height + "px";
+  el.style.width = this.width + "px";
+  el.style.background = this.bg;
+  el.style.fontSize = this.fontSize + "px";
+  document.body.append(el);
+  document.body.append(inp);
+  inp.addEventListener('keyup', function () {
+    el.textContent = inp.value
+  })
+
+};
 
 
+const appData = new DomElement('#fff', 100, 200, 'blue', 20);
 
-change.addEventListener('click', gen)
-
-// console.log((document.body.style.background = "#9A0123"));
+appData.create()
