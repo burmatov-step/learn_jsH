@@ -28,7 +28,8 @@ class Todo {
             "beforeend",
             `
         <span class="text-todo">${todo.value}</span>
-				<div class="todo-buttons">
+                <div class="todo-buttons">
+                    <button class="todo-edit"></button>
 					<button class="todo-remove"></button>
 					<button class="todo-complete"></button>
 				</div>
@@ -64,35 +65,70 @@ class Todo {
         );
     }
 
-    deleteItem(elem) {
-        const li = elem.closest(".todo-item"),
-            keyLi = li.getAttribute("key");
-        this.todoData.delete(keyLi);
-        this.addToStorage();
-        li.remove();
+    deleteItem(li) {
+        const keyLi = li.getAttribute("key");
+        let count = 0;
+        const senInt = setInterval(() => {
+            li.style.transform = `translateX(${count}%)`;
+            count -= 10;
+            if (count < -120) {
+                clearInterval(senInt);
+                this.todoData.delete(keyLi);
+                this.addToStorage();
+                li.remove();
+            }
+        }, 20);
     }
 
-    completedItem(elem) {
-        const li = elem.closest(".todo-item"),
-            keyLi = li.getAttribute("key"),
+    animateItem(li, keyLi, bool) {
+        let count = 0;
+        const senInt = setInterval(() => {
+            li.style.transform = `translateX(${count}%)`;
+            count -= 5;
+            if (count < -120) {
+                clearInterval(senInt);
+                this.todoData.get(keyLi).completed = bool;
+                this.render();
+            }
+        }, 20);
+    }
+
+    completedItem(li) {
+        const keyLi = li.getAttribute("key"),
             complete = this.todoData.get(keyLi).completed;
         if (complete) {
-            this.todoData.get(keyLi).completed = false;
+            this.animateItem(li, keyLi, false);
         } else {
-            this.todoData.get(keyLi).completed = true;
+            this.animateItem(li, keyLi, true);
         }
-        this.render();
+    }
+    editItem(li) {
+        const span = li.querySelector("span"),
+            keyLi = li.getAttribute("key");
+        span.setAttribute("contenteditable", "true");
+        span.focus();
+        span.addEventListener("blur", () => {
+            span.setAttribute("contenteditable", "false");
+            this.todoData.get(keyLi).value = span.textContent;
+            this.render();
+        });
     }
 
     handler() {
         this.todoContainer.addEventListener("click", e => {
-            const target = e.target;
+            const target = e.target,
+                li = target.closest(".todo-item");
+
             if (target.className === "todo-remove") {
-                this.deleteItem(target);
+                this.deleteItem(li);
             }
 
             if (target.className === "todo-complete") {
-                this.completedItem(target);
+                this.completedItem(li);
+            }
+
+            if (target.className === "todo-edit") {
+                this.editItem(li);
             }
         });
     }
