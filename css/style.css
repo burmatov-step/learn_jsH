@@ -37,6 +37,7 @@ body .main .input-cities {
 }
 
 body .main .input-cities #select-cities {
+  display: block;
   border: 1px solid #ccc;
   padding: 7px 14px;
   -webkit-transition: 0.4s;
@@ -46,6 +47,10 @@ body .main .input-cities #select-cities {
   height: 100%;
   font-size: 18px;
   color: #00416A;
+}
+
+body .main .input-cities #select-cities::placeholder{
+  color: #fff
 }
 
 body .main .input-cities #select-cities:focus ~ .label {

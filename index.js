@@ -11,16 +11,63 @@ const listDefault = document.querySelector(".dropdown-lists__list--default"),
   ),
   listsColAutocomplete = listAutocomplete.querySelector(".dropdown-lists__col"),
   inputCities = document.querySelector(".input-cities");
-// let countryRu = {};
 
-const getCountry = (body) => {
+const getLang = () =>{
+  let lang;
+  document.cookie.split(";").forEach((item) => {
+    if (item.substring(0, 4) === "lang") {
+      lang = item.split("=")[1];
+    }
+  });
+
+  if (!lang || lang.toUpperCase() !== 'RU' && lang.toUpperCase() !== 'EN' && lang.toUpperCase() !== 'DE') {
+    document.cookie = `lang = ${prompt("Введите RU, EN или DE").toUpperCase()}`;
+    getLang();
+  }
+  return lang;
+}
+
+getLang();
+
+const getCountry = () => {
   return fetch("db_cities.json", {
     method: "GET",
   });
 };
 
+
+ getCountry()
+  .then((response) => {
+    return response.json();
+  })
+  .then((response) => {
+     localStorage.country = JSON.stringify(response[getLang()]);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+
+
+
+
+
 // формирование listDefault
 const rendCountry = (res) => {
+  res.sort((a, b) =>{
+    let lang = getLang()
+    if(lang === "RU" && a.country === "Россия"){
+      return -1;
+    }
+
+    if (lang === "EN" && a.country === "United Kingdom") {
+      return -1;
+    }
+    if (lang === "DE" && a.country === "Deutschland") {
+      return -1;
+    }
+  })
+
   const wrap = document.createElement("div");
   wrap.classList.add("dropdown-lists__countryBlock");
   res.forEach((item) => {
@@ -143,22 +190,14 @@ const renderAutoComplete = (val, countryRu) => {
 // переход на listSelect
 listDefault.addEventListener("click", (e) => {
   let target = e.target;
-  cubeLoader.style.display = "inline-block";
+
   if (target.closest(".dropdown-lists__total-line")) {
+    cubeLoader.style.display = "inline-block";
     const wrap = target.closest(".dropdown-lists__total-line");
     const nameCountry = wrap.children[0].innerText;
-    getCountry()
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        let countryRu = response.RU;
+    let countryRus = JSON.parse(localStorage.country);
+    selectVal(nameCountry, countryRus);
 
-        selectVal(nameCountry, countryRu);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 });
 
@@ -188,18 +227,9 @@ listSelect.addEventListener("click", (e) => {
 selectCities.addEventListener("focus", () => {
   if(!listsColDefault.childElementCount){
     cubeLoader.style.display = 'inline-block';
-getCountry()
-  .then((response) => {
-    return response.json();
-  })
-  .then((response) => {
-    let countryRu = response.RU;
+    let countryRus = JSON.parse(localStorage.country);
+    rendCountry(countryRus);
 
-    rendCountry(countryRu);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
   };
 
 });
@@ -208,18 +238,9 @@ getCountry()
 selectCities.addEventListener("input", () => {
   button.href = "#";
   if (selectCities.value.length > 0) {
-    getCountry()
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        let countryRu = response.RU;
+    let countryRus = JSON.parse(localStorage.country);
+    renderAutoComplete(selectCities.value, countryRus);
 
-        renderAutoComplete(selectCities.value, countryRu);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
     listDefault.style.display = "none";
     listSelect.style.display = "none";
@@ -253,17 +274,8 @@ inputCities.addEventListener("click", (e) => {
   }
   // появление ссылки
   if (target.className === "dropdown-lists__city") {
-    getCountry()
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        let countryRu = response.RU;
-        linkCity(countryRu);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    let countryRus = JSON.parse(localStorage.country);
+    linkCity(countryRus);
   }
 
   if (target === closeButton) {
@@ -276,3 +288,4 @@ inputCities.addEventListener("click", (e) => {
     button.href = "#";
   }
 });
+
