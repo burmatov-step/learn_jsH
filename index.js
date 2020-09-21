@@ -35,6 +35,9 @@ const rendCountry = (res) => {
   });
 
   function renderCity(arr) {
+    arr.sort((a, b)=>{
+     return b.count - a.count
+    })
     for (let i = 0; i < 3; i++) {
       const city = document.createElement("div");
       city.classList.add("dropdown-lists__line");
